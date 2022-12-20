@@ -22,12 +22,7 @@ namespace CrazyEights.Utils
             }
             while (currentValue != 0);
 
-            while (sb.Length < 8)
-            {
-                sb.Insert(0, alphabet[0]);
-            }
-
-            return sb.ToString();
+            return sb.ToString().PadLeft(8, alphabet[0]);
         }
 
         public static Int32 Decode(string code)
