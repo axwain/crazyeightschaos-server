@@ -1,3 +1,5 @@
+using CrazyEights.Exceptions;
+
 namespace CrazyEights.Entities
 {
     public class Room
@@ -62,6 +64,8 @@ namespace CrazyEights.Entities
 
         public bool Add(Player player)
         {
+            CheckIfInit();
+
             if (!IsFull && !Players.ContainsKey(player.Id))
             {
                 Players.Add(player.Id, player);
@@ -69,6 +73,49 @@ namespace CrazyEights.Entities
             }
 
             return false;
+        }
+
+        public bool Remove(int playerId)
+        {
+            CheckIfInit();
+
+            if (!IsEmpty && Players.ContainsKey(playerId))
+            {
+                Players.Remove(playerId);
+                if (playerId == RoomOwner?.Id && PlayerCount > 0)
+                {
+                    RoomOwner = Players.First().Value;
+                }
+
+                if (IsEmpty)
+                {
+                    Id = -1;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ChangeRoomOwner(int ownerId, int playerId)
+        {
+            CheckIfInit();
+            if (RoomOwner?.Id == ownerId && playerId != ownerId && Players.ContainsKey(playerId))
+            {
+                RoomOwner = Players[playerId];
+            }
+            else
+            {
+                throw new InvalidOperationException($"Can't change room owner from {ownerId} to {playerId}");
+            }
+        }
+
+        private void CheckIfInit()
+        {
+            if (Id < 0)
+            {
+                throw new NotInitializedException("Room Init should be run before any other method");
+            }
         }
     }
 }
