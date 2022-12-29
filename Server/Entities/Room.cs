@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 using CrazyEights.Exceptions;
 
 namespace CrazyEights.Entities
@@ -48,26 +50,25 @@ namespace CrazyEights.Entities
 
         private Dictionary<int, Player> Players { get; set; }
 
-        public Room(int maxPlayers)
+        public Room(int maxPlayers, Int32 id)
         {
-            Id = -1;
+            if (id < 1)
+            {
+                throw new ArgumentOutOfRangeException("Id", "Id should be greater than 0");
+            }
+            Id = id;
             MaxPlayers = maxPlayers;
             Players = new Dictionary<int, Player>(maxPlayers);
         }
 
-        public void Init(Int32 id, Player owner)
-        {
-            Id = id;
-            Players.Add(owner.Id, owner);
-            RoomOwner = owner;
-        }
-
         public bool Add(Player player)
         {
-            CheckIfInit();
-
             if (!IsFull && !Players.ContainsKey(player.Id))
             {
+                if (IsEmpty)
+                {
+                    RoomOwner = player;
+                }
                 Players.Add(player.Id, player);
                 return true;
             }
@@ -77,20 +78,19 @@ namespace CrazyEights.Entities
 
         public bool Remove(int playerId)
         {
-            CheckIfInit();
-
             if (!IsEmpty && Players.ContainsKey(playerId))
             {
                 Players.Remove(playerId);
-                if (playerId == RoomOwner?.Id && PlayerCount > 0)
+                if (IsEmpty)
+                {
+                    RoomOwner = null;
+                }
+
+                if (playerId == RoomOwner?.Id && !IsEmpty)
                 {
                     RoomOwner = Players.First().Value;
                 }
 
-                if (IsEmpty)
-                {
-                    Id = -1;
-                }
                 return true;
             }
 
@@ -99,7 +99,6 @@ namespace CrazyEights.Entities
 
         public void ChangeRoomOwner(int ownerId, int playerId)
         {
-            CheckIfInit();
             if (RoomOwner?.Id == ownerId && playerId != ownerId && Players.ContainsKey(playerId))
             {
                 RoomOwner = Players[playerId];
@@ -107,14 +106,6 @@ namespace CrazyEights.Entities
             else
             {
                 throw new InvalidOperationException($"Can't change room owner from {ownerId} to {playerId}");
-            }
-        }
-
-        private void CheckIfInit()
-        {
-            if (Id < 0)
-            {
-                throw new NotInitializedException("Room Init should be run before any other method");
             }
         }
     }
