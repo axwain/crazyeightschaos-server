@@ -26,11 +26,12 @@ namespace CrazyEights.Entities
             DiscardedPile = new Queue<Card>(PILE_SIZE);
             CardsToReshuffle = new List<Card>(Cards.Count);
 
-            LoadedCards.Add(Suits.Wild, CreateCardList(wilds));
+            LoadedCards.Add(Suits.Wild, CreateCardList(wilds, Suits.Wild));
 
             for (int i = 1; i < TOTAL_SUITS; i++)
             {
-                LoadedCards.Add((Suits)i, CreateCardList(cards));
+                var suit = (Suits)i;
+                LoadedCards.Add(suit, CreateCardList(cards, suit));
             }
         }
 
@@ -117,14 +118,14 @@ namespace CrazyEights.Entities
             ShuffleDeck();
         }
 
-        private IList<Card> CreateCardList(IList<int[]> rawCards)
+        private IList<Card> CreateCardList(IList<int[]> rawCards, Suits suit)
         {
             var cardList = new List<Card>(rawCards.Count);
             foreach (var card in rawCards)
             {
                 cardList.Add(new Card
                 {
-                    SuiteId = Suits.Wild,
+                    SuiteId = suit,
                     Value = card[0],
                     EffectId = (Effects)card[1],
                     EffectArg = card[2],
