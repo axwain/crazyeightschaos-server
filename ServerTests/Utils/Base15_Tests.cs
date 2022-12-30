@@ -8,19 +8,19 @@ namespace CrazyEights.Tests.Utils
         [Test]
         public void Encode_ValueZero_ReturnAllZeroes()
         {
-            Assert.AreEqual(Base15.Encode(0), "00000000");
+            Assert.That(Base15.Encode(0), Is.EqualTo("00000000"));
         }
 
         [Test]
         public void Encode_ValueMaxInt32_ReturnD87Z66C7()
         {
-            Assert.AreEqual(Base15.Encode(Int32.MaxValue), "D87Z66C7");
+            Assert.That(Base15.Encode(Int32.MaxValue), Is.EqualTo("D87Z66C7"));
         }
 
         [Test]
         public void Encode_Value50624_Return0000ZZZZ()
         {
-            Assert.AreEqual(Base15.Encode(50624), "0000ZZZZ");
+            Assert.That(Base15.Encode(50624), Is.EqualTo("0000ZZZZ"));
         }
 
         [Test]
