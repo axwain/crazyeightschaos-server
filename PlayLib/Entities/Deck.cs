@@ -1,8 +1,10 @@
-namespace CrazyEights.Entities
+using System;
+using System.Collections.Generic;
+
+namespace CrazyEights.PlayLib.Entities
 {
     public class Deck
     {
-        private readonly int PILE_SIZE = 10;
         private readonly int TOTAL_DEFAULT_SUITS = 4;
         private readonly int TOTAL_EXTENDED_SUITS = 5;
         private readonly int TOTAL_SUITS = 6;
@@ -14,7 +16,6 @@ namespace CrazyEights.Entities
 
         private IDictionary<Suits, IList<Card>> LoadedCards { get; set; }
         private List<Card> Cards { get; set; }
-        private Queue<Card> DiscardedPile { get; set; }
 
         private int CurrentCard { get; set; }
         private IList<Card> CardsToReshuffle { get; set; }
@@ -23,7 +24,6 @@ namespace CrazyEights.Entities
         {
             LoadedCards = new Dictionary<Suits, IList<Card>>(TOTAL_SUITS);
             Cards = new List<Card>(wilds.Count * 4 + cards.Count * TOTAL_EXTENDED_SUITS);
-            DiscardedPile = new Queue<Card>(PILE_SIZE);
             CardsToReshuffle = new List<Card>(Cards.Count);
 
             LoadedCards.Add(Suits.Wild, CreateCardList(wilds, Suits.Wild));
@@ -93,29 +93,10 @@ namespace CrazyEights.Entities
 
             if (CurrentCard < 1)
             {
-                ShuffleDiscardedCards();
+                ShuffleDeck();
             }
 
             return card;
-        }
-
-        public void Discard(Card card)
-        {
-            if (DiscardedPile.Count == PILE_SIZE)
-            {
-                CardsToReshuffle.Add(DiscardedPile.Dequeue());
-            }
-
-            DiscardedPile.Enqueue(card);
-        }
-
-        // this should be executed only when current card is equal to 0
-        private void ShuffleDiscardedCards()
-        {
-            Cards.Clear();
-            Cards.AddRange(CardsToReshuffle);
-            CardsToReshuffle.Clear();
-            ShuffleDeck();
         }
 
         private IList<Card> CreateCardList(IList<int[]> rawCards, Suits suit)
@@ -123,14 +104,14 @@ namespace CrazyEights.Entities
             var cardList = new List<Card>(rawCards.Count);
             foreach (var card in rawCards)
             {
-                cardList.Add(new Card
-                {
-                    SuiteId = suit,
-                    Value = card[0],
-                    EffectId = (Effects)card[1],
-                    EffectArg = card[2],
-                });
+                cardList.Add(new Card(
+                    suit,
+                    card[0],
+                    (Effects)card[1],
+                    card[2]
+                ));
             }
+
             return cardList;
         }
     }
