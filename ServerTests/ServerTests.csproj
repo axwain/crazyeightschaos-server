@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Server\Server.csproj" />
+    <ProjectReference Include="..\PlayLib\PlayLib.csproj" />
   </ItemGroup>
 
 </Project>
