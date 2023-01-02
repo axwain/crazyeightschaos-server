@@ -72,7 +72,7 @@ namespace CrazyEights.PlayLib.Entities
             }
         }
 
-        public void ShuffleDeck()
+        public void Shuffle()
         {
             var rndNumber = new Random();
             for (int i = 0; i < Cards.Count; i++)
@@ -86,6 +86,13 @@ namespace CrazyEights.PlayLib.Entities
             CurrentCard = Cards.Count;
         }
 
+        public void Reshuffle(Card[] cards)
+        {
+            Cards.Clear();
+            Cards.AddRange(cards);
+            Shuffle();
+        }
+
         public Card DrawCard()
         {
             CurrentCard--;
@@ -93,7 +100,7 @@ namespace CrazyEights.PlayLib.Entities
 
             if (CurrentCard < 1)
             {
-                ShuffleDeck();
+                Shuffle();
             }
 
             return card;

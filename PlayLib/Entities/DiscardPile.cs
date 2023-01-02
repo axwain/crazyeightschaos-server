@@ -47,11 +47,11 @@ namespace CrazyEights.PlayLib.Entities
             }
         }
 
-        public int Clear()
+        public Card[] Clear()
         {
-            var size = Cards.Count;
+            var cards = Cards.ToArray();
             Cards.Clear();
-            return size;
+            return cards;
         }
 
         private void AddCard(Card card)

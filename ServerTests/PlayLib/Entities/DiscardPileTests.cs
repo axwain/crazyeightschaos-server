@@ -148,10 +148,20 @@ namespace CrazyEights.Tests.Entities
             discardPile.Add(wildCard);
             discardPile.Add(lastCard);
 
-            var totalDiscarded = discardPile.Clear();
+            var cards = discardPile.Clear();
 
             Assert.That(discardPile.IsEmpty, Is.True, "Pile is empty after clearing");
-            Assert.That(totalDiscarded, Is.EqualTo(cardCount), "Pile had three cards");
+            Assert.That(cards.Length, Is.EqualTo(cardCount), "Pile had three cards");
+            Assert.That(
+                firstCard.Equals(cards[0]),
+                Is.True,
+                "The first discarded card is the first returned card"
+            );
+            Assert.That(
+                lastCard.Equals(cards[2]),
+                Is.True,
+                "The last discarded card is the last returned card"
+            );
         }
     }
 }
