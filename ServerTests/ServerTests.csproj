@@ -21,4 +21,39 @@
     <ProjectReference Include="..\PlayLib\PlayLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\invalidDeck.json">
+      <Link>Assets\DeckDefinitions\invalidDeck.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\invalidEffectId.json">
+      <Link>Assets\DeckDefinitions\invalidEffectId.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\invalidEmptySuits.json">
+      <Link>Assets\DeckDefinitions\invalidEmptySuits.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\invalidMaxBaseCopies.json">
+      <Link>Assets\DeckDefinitions\invalidMaxBaseCopies.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\invalidMaxExtendedCopies.json">
+      <Link>Assets\DeckDefinitions\invalidMaxExtendedCopies.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\outOfRangeEffectId.json">
+      <Link>Assets\DeckDefinitions\outOfRangeEffectId.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\validDeck.json">
+      <Link>Assets\DeckDefinitions\validDeck.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".\PlayLib\TestAssets\DeckDefinitions\validDeckEmptyWilds.json">
+      <Link>Assets\DeckDefinitions\validDeckEmptyWilds.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
