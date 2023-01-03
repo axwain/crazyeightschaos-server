@@ -17,7 +17,7 @@ namespace CrazyEights.Tests.PlayLib.Utils
         [Test, Description("Loads cards from a json string")]
         public void DeckDefinitionLoader_Load_ValidDeck()
         {
-            var validDeckPath = "./Assets/validDeck.json";
+            var validDeckPath = "./Assets/DeckDefinitions/validDeck.json";
             Assert.That(File.Exists(validDeckPath), Is.True, "Asset File Exists");
             var jsonString = File.ReadAllText(validDeckPath);
             var deckDefinition = DeckDefinitionLoader.Load<DeckDefinition>(jsonString);
