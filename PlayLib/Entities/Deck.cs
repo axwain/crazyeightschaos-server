@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 
+using CrazyEights.PlayLib.Enums;
+
 namespace CrazyEights.PlayLib.Entities
 {
+    //TODO: rework to make use of DeckLoader data
     public class Deck
     {
-        private readonly int TOTAL_DEFAULT_SUITS = 4;
+        private readonly int TOTAL_BASE_SUITS = 4;
         private readonly int TOTAL_EXTENDED_SUITS = 5;
         private readonly int TOTAL_SUITS = 6;
         private readonly int WILD_COUNT = 4;
@@ -48,7 +51,7 @@ namespace CrazyEights.PlayLib.Entities
                 }
             }
 
-            var totalSuits = numberOfPlayers < PLAYER_LIMIT_EXTENDED_SUITS ? TOTAL_DEFAULT_SUITS : TOTAL_EXTENDED_SUITS;
+            var totalSuits = numberOfPlayers < PLAYER_LIMIT_EXTENDED_SUITS ? TOTAL_BASE_SUITS : TOTAL_EXTENDED_SUITS;
             var maxCopies = numberOfPlayers < PLAYER_LIMIT_EXTENDED_COPIES ? DEFAULT_COPIES_COUNT : EXTENDED_COPIES_COUNT;
 
             for (int i = 0; i < totalSuits; i++)
