@@ -1,6 +1,7 @@
 using CrazyEights.PlayLib.Entities;
+using CrazyEights.PlayLib.Enums;
 
-namespace CrazyEights.Tests.Entities
+namespace CrazyEights.Tests.PlayLib.Entities
 {
     [TestFixture]
     public class DiscardPileTests
@@ -11,7 +12,8 @@ namespace CrazyEights.Tests.Entities
             var cardCount = 1;
             var firstCard = new Card(Suits.Spade, 1, Effects.None, 0);
             var discardPile = new DiscardPile(firstCard, cardCount);
-            Assert.That(discardPile.TopCard.Equals(firstCard), Is.True, "Pile Top Card is equal to the first card");
+            discardPile.TopCard.Update(firstCard.SuitId, firstCard.Value);
+            Assert.That(discardPile.TopCard.Matches(firstCard), Is.True, "Pile Top Card matches the first card");
             Assert.That(discardPile.IsEmpty, Is.False, "Pile is not empty after initialization");
         }
 
@@ -39,22 +41,23 @@ namespace CrazyEights.Tests.Entities
             var differentCardTwo = new Card(Suits.Diamond, 2, Effects.None, 0);
             var differentCardThree = new Card(Suits.Heart, 3, Effects.SkipTurn, 0);
             var discardPile = new DiscardPile(firstCard, cardCount);
+            discardPile.TopCard.Update(firstCard.SuitId, firstCard.Value);
 
-            Assert.That(discardPile.CanAdd(wildCard), Is.True, "Can add wild card");
-            Assert.That(discardPile.CanAdd(sameSuitCard), Is.True, "Can add card with same suit");
-            Assert.That(discardPile.CanAdd(sameValueCard), Is.True, "Can add card with same value");
+            Assert.That(discardPile.TopCard.Matches(wildCard), Is.True, "Can add wild card");
+            Assert.That(discardPile.TopCard.Matches(sameSuitCard), Is.True, "Can add card with same suit");
+            Assert.That(discardPile.TopCard.Matches(sameValueCard), Is.True, "Can add card with same value");
             Assert.That(
-                discardPile.CanAdd(differentCardOne),
+                discardPile.TopCard.Matches(differentCardOne),
                 Is.False,
                 "Can't that's not a wild, with same suit, or with same value"
             );
             Assert.That(
-                discardPile.CanAdd(differentCardTwo),
+                discardPile.TopCard.Matches(differentCardTwo),
                 Is.False,
                 "Can't that's not a wild, with same suit, or with same value"
             );
             Assert.That(
-                discardPile.CanAdd(differentCardThree),
+                discardPile.TopCard.Matches(differentCardThree),
                 Is.False,
                 "Can't that's not a wild, with same suit, or with same value"
             );
@@ -71,37 +74,42 @@ namespace CrazyEights.Tests.Entities
             var sameValueCard = new Card(Suits.Star, 5, Effects.None, 0);
             var discardPile = new DiscardPile(firstCard, cardCount);
 
+            discardPile.TopCard.Update(firstCard.SuitId, firstCard.Value);
             discardPile.Add(wildCard);
             Assert.That(
-                discardPile.TopCard.Equals(wildCard),
+                discardPile.TopCard.Matches(wildCard),
                 Is.True,
                 "Wild card was added at the top of the pile"
             );
 
+            discardPile.TopCard.Update(Suits.Diamond, -1);
             discardPile.Add(wildCard);
             Assert.That(
-                discardPile.TopCard.Equals(wildCard),
+                discardPile.TopCard.Matches(wildCard),
                 Is.True,
                 "A wild card after a wild card was added at the top of the pile"
             );
 
+            discardPile.TopCard.Update(cardAfterWild.SuitId, -1);
             discardPile.Add(cardAfterWild);
             Assert.That(
-                discardPile.TopCard.Equals(cardAfterWild),
+                discardPile.TopCard.Matches(cardAfterWild),
                 Is.True,
                 "A card after a wild was added at the top of the pile"
             );
 
+            discardPile.TopCard.Update(cardAfterWild.SuitId, cardAfterWild.Value);
             discardPile.Add(sameSuitCard);
             Assert.That(
-                discardPile.TopCard.Equals(sameSuitCard),
+                discardPile.TopCard.Matches(sameSuitCard),
                 Is.True,
                 "A card with the same suit was added at the top of the pile"
             );
 
+            discardPile.TopCard.Update(sameSuitCard.SuitId, sameSuitCard.Value);
             discardPile.Add(sameValueCard);
             Assert.That(
-                discardPile.TopCard.Equals(sameValueCard),
+                discardPile.TopCard.Matches(sameValueCard),
                 Is.True,
                 "A card with the same value was added at the top of the pile"
             );
@@ -117,6 +125,7 @@ namespace CrazyEights.Tests.Entities
             var differentCardThree = new Card(Suits.Heart, 4, Effects.None, 0);
             var discardPile = new DiscardPile(firstCard, cardCount);
 
+            discardPile.TopCard.Update(firstCard.SuitId, firstCard.Value);
             Assert.That(
                 () => discardPile.Add(differentCardOne),
                 Throws.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("card"),
@@ -145,8 +154,11 @@ namespace CrazyEights.Tests.Entities
             var lastCard = new Card(Suits.Club, 3, Effects.None, 0);
             var discardPile = new DiscardPile(firstCard, cardCount);
 
+            discardPile.TopCard.Update(firstCard.SuitId, firstCard.Value);
             discardPile.Add(wildCard);
+            discardPile.TopCard.Update(lastCard.SuitId, -1);
             discardPile.Add(lastCard);
+            discardPile.TopCard.Update(lastCard.SuitId, lastCard.Value);
 
             var cards = discardPile.Clear();
 
