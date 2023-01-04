@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 using CrazyEights.PlayLib.Data;
 using CrazyEights.PlayLib.Utils;
 
@@ -47,6 +49,58 @@ namespace CrazyEights.Tests.PlayLib.Utils
             );
         }
 
+        [Test, Description("Throws when loading invalid Card Data")]
+        public void DeckDefinitionLoader_Load_InvalidCardData()
+        {
+            var deckPath = "./Assets/DeckDefinitions/invalidCardData.json";
+            Assert.That(File.Exists(deckPath), Is.True, "Asset File Exists");
+            var jsonString = File.ReadAllText(deckPath);
+            Assert.That(
+                () => DeckDefinitionLoader.Load<DeckDefinition>(jsonString),
+                Throws.Exception,
+                "Should throw if card data is invalid"
+            );
+        }
+
+        [Test, Description("Throws when loading Card Data with duplicated properties")]
+        public void DeckDefinitionLoader_Load_InvalidCardData_DuplicatedProperties()
+        {
+            var deckPath = "./Assets/DeckDefinitions/invalidCardDataDuplicatedProperties.json";
+            Assert.That(File.Exists(deckPath), Is.True, "Asset File Exists");
+            var jsonString = File.ReadAllText(deckPath);
+            Assert.That(
+                () => DeckDefinitionLoader.Load<DeckDefinition>(jsonString),
+                Throws.Exception,
+                "Should throw if card data has duplicated properties"
+            );
+        }
+
+        [Test, Description("Throws when loading Card Data with extra properties")]
+        public void DeckDefinitionLoader_Load_InvalidCardData_ExtraProperties()
+        {
+            var deckPath = "./Assets/DeckDefinitions/invalidCardDataExtraProperties.json";
+            Assert.That(File.Exists(deckPath), Is.True, "Asset File Exists");
+            var jsonString = File.ReadAllText(deckPath);
+            Assert.That(
+                () => DeckDefinitionLoader.Load<DeckDefinition>(jsonString),
+                Throws.Exception,
+                "Should throw if card data has extra properties"
+            );
+        }
+
+        [Test, Description("Throws when loading Card Data with wrong properties")]
+        public void DeckDefinitionLoader_Load_InvalidCardData_WrongProperties()
+        {
+            var deckPath = "./Assets/DeckDefinitions/invalidCardDataWrongProperties.json";
+            Assert.That(File.Exists(deckPath), Is.True, "Asset File Exists");
+            var jsonString = File.ReadAllText(deckPath);
+            Assert.That(
+                () => DeckDefinitionLoader.Load<DeckDefinition>(jsonString),
+                Throws.Exception,
+                "Should throw if card data has invalid properties"
+            );
+        }
+
         [Test, Description("Throws when loading an invalid Deck Definition Json")]
         public void DeckDefinitionLoader_Load_InvalidDeck()
         {
@@ -56,7 +110,7 @@ namespace CrazyEights.Tests.PlayLib.Utils
             Assert.That(
                 () => DeckDefinitionLoader.Load<DeckDefinition>(jsonString),
                 Throws.Exception,
-                "Discard Pile must be initialized with a card count greater than zero"
+                "Should throw if deck definition is invalid"
             );
         }
 
@@ -68,7 +122,7 @@ namespace CrazyEights.Tests.PlayLib.Utils
             var jsonString = File.ReadAllText(deckPath);
             Assert.That(
                 () => DeckDefinitionLoader.Load<DeckDefinition>(jsonString),
-                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("effectId"),
+                Throws.TypeOf<JsonException>(),
                 "Deck definition must have valid Effect Ids"
             );
         }
