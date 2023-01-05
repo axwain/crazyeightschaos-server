@@ -1,7 +1,3 @@
-using System.Diagnostics;
-
-using CrazyEights.Exceptions;
-
 namespace CrazyEights.Entities
 {
     public class Room

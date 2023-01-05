@@ -1,5 +1,4 @@
 using CrazyEights.Entities;
-using CrazyEights.Exceptions;
 
 namespace CrazyEights.Tests.Entities
 {
