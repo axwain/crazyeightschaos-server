@@ -7,7 +7,7 @@ namespace CrazyEights.PlayLib.Entities
     //TODO: Extract TopCard property
     public class DiscardPile
     {
-        public TokenCard TopCard { get; private set; }
+        public TopCard TopCard { get; private set; }
         public bool IsEmpty { get { return Cards.Count == 0; } }
         private IList<Card> Cards { get; set; }
 
@@ -17,7 +17,7 @@ namespace CrazyEights.PlayLib.Entities
             {
                 Cards = new List<Card>(totalCards);
                 Cards.Add(firstCard);
-                TopCard = new TokenCard();
+                TopCard = new TopCard();
             }
             else
             {
