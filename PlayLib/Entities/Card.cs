@@ -1,3 +1,5 @@
+using System;
+
 using CrazyEights.PlayLib.Enums;
 
 namespace CrazyEights.PlayLib.Entities
@@ -11,6 +13,11 @@ namespace CrazyEights.PlayLib.Entities
 
         public Card(Suits suit, int value, Effects effect, int effectArg)
         {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException("value", "Value can't be negative");
+            }
+
             SuitId = suit;
             Value = value;
             EffectId = effect;
