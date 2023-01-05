@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CrazyEights.PlayLib.Data
 {
@@ -7,6 +8,8 @@ namespace CrazyEights.PlayLib.Data
     {
         public IList<CardData> Suits { get; private set; }
         public IList<CardData> Wilds { get; private set; }
+        public int SuitsMaxCount { get; private set; }
+        public int WildsMaxCount { get; private set; }
 
         public DeckDefinition(
             IList<CardData> suits,
@@ -19,6 +22,8 @@ namespace CrazyEights.PlayLib.Data
             }
             Suits = suits;
             Wilds = wilds;
+            SuitsMaxCount = Suits.Aggregate(0, (acc, card) => acc + card.MaxExtendedCopies);
+            WildsMaxCount = Wilds.Aggregate(0, (acc, card) => acc + card.MaxExtendedCopies);
         }
     }
 }

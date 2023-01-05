@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
 
+using CrazyEights.PlayLib.Data;
 using CrazyEights.PlayLib.Enums;
 
 namespace CrazyEights.PlayLib.Entities
 {
-    //TODO: rework to make use of DeckLoader data
     public class Deck
     {
-        private readonly int TOTAL_BASE_SUITS = 4;
         private readonly int TOTAL_EXTENDED_SUITS = 5;
-        private readonly int TOTAL_SUITS = 6;
-        private readonly int WILD_COUNT = 4;
-        private readonly int DEFAULT_COPIES_COUNT = 1;
-        private readonly int EXTENDED_COPIES_COUNT = 2;
+        private readonly int TOTAL_SUITS = 5;
         private readonly int PLAYER_LIMIT_EXTENDED_SUITS = 5;
         private readonly int PLAYER_LIMIT_EXTENDED_COPIES = 3;
 
@@ -21,20 +17,19 @@ namespace CrazyEights.PlayLib.Entities
         private List<Card> Cards { get; set; }
 
         private int CurrentCard { get; set; }
-        private IList<Card> CardsToReshuffle { get; set; }
 
-        public Deck(IList<int[]> wilds, IList<int[]> cards)
+        public Deck(DeckDefinition definition)
         {
-            LoadedCards = new Dictionary<Suits, IList<Card>>(TOTAL_SUITS);
-            Cards = new List<Card>(wilds.Count * 4 + cards.Count * TOTAL_EXTENDED_SUITS);
-            CardsToReshuffle = new List<Card>(Cards.Count);
+            LoadedCards = new Dictionary<Suits, IList<Card>>(TOTAL_SUITS + 1);
+            var maxCardCount = definition.WildsMaxCount + definition.SuitsMaxCount * TOTAL_EXTENDED_SUITS;
+            Cards = new List<Card>(maxCardCount);
 
-            LoadedCards.Add(Suits.Wild, CreateCardList(wilds, Suits.Wild));
+            LoadedCards.Add(Suits.Wild, CreateCardList(definition.Wilds, Suits.Wild));
 
-            for (int i = 1; i < TOTAL_SUITS; i++)
+            for (int i = 0; i < TOTAL_SUITS; i++)
             {
                 var suit = (Suits)i;
-                LoadedCards.Add(suit, CreateCardList(cards, suit));
+                LoadedCards.Add(suit, CreateCardList(definition.Suits, suit));
             }
         }
 
@@ -45,31 +40,25 @@ namespace CrazyEights.PlayLib.Entities
             var wilds = LoadedCards[Suits.Wild];
             foreach (var wild in wilds)
             {
-                for (int i = 0; i < WILD_COUNT; i++)
+                var wildCount = ShouldUseBaseCopies(numberOfPlayers) ? wild.MaxBaseCopies : wild.MaxExtendedCopies;
+                for (int i = 0; i < wildCount; i++)
                 {
                     Cards.Add(wild);
                 }
             }
 
-            var totalSuits = numberOfPlayers < PLAYER_LIMIT_EXTENDED_SUITS ? TOTAL_BASE_SUITS : TOTAL_EXTENDED_SUITS;
-            var maxCopies = numberOfPlayers < PLAYER_LIMIT_EXTENDED_COPIES ? DEFAULT_COPIES_COUNT : EXTENDED_COPIES_COUNT;
+            var startSuit = ShouldUseBaseSuits(numberOfPlayers) ? Suits.Spade : Suits.Star;
 
-            for (int i = 0; i < totalSuits; i++)
+            for (int i = (int)startSuit; i < TOTAL_SUITS; i++)
             {
                 var suit = (Suits)(i + 1);
                 var suitCards = LoadedCards[suit];
                 foreach (var card in suitCards)
                 {
-                    if (card.Value == 0)
+                    var maxCopies = ShouldUseBaseCopies(numberOfPlayers) ? card.MaxBaseCopies : card.MaxExtendedCopies;
+                    for (int j = 0; j < maxCopies; j++)
                     {
                         Cards.Add(card);
-                    }
-                    else
-                    {
-                        for (int j = 0; j < maxCopies; j++)
-                        {
-                            Cards.Add(card);
-                        }
                     }
                 }
             }
@@ -98,31 +87,36 @@ namespace CrazyEights.PlayLib.Entities
 
         public Card DrawCard()
         {
+            if (CurrentCard <= 0)
+            {
+                throw new InvalidOperationException("Can't draw card from empty deck");
+            }
+
             CurrentCard--;
             var card = Cards[CurrentCard];
-
-            if (CurrentCard < 1)
-            {
-                Shuffle();
-            }
 
             return card;
         }
 
-        private IList<Card> CreateCardList(IList<int[]> rawCards, Suits suit)
+        private IList<Card> CreateCardList(IList<CardData> rawCards, Suits suit)
         {
             var cardList = new List<Card>(rawCards.Count);
-            foreach (var card in rawCards)
+            for (var i = 0; i < rawCards.Count; i++)
             {
-                cardList.Add(new Card(
-                    suit,
-                    card[0],
-                    (Effects)card[1],
-                    card[2]
-                ));
+                cardList.Add(new Card(suit, i, rawCards[i]));
             }
 
             return cardList;
+        }
+
+        private bool ShouldUseBaseCopies(int numberOfPlayers)
+        {
+            return numberOfPlayers < PLAYER_LIMIT_EXTENDED_COPIES;
+        }
+
+        private bool ShouldUseBaseSuits(int numberOfPlayers)
+        {
+            return numberOfPlayers < PLAYER_LIMIT_EXTENDED_SUITS;
         }
     }
 }
