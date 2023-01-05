@@ -4,13 +4,12 @@ using CrazyEights.PlayLib.Enums;
 
 namespace CrazyEights.PlayLib.Entities
 {
-    // TODO: Create own tests
-    public class TokenCard
+    public class TopCard
     {
         public Suits SuitId { get; private set; }
         public int Value { get; private set; }
 
-        internal TokenCard()
+        public TopCard()
         {
             SuitId = Suits.Wild;
             Value = -1;
@@ -20,7 +19,7 @@ namespace CrazyEights.PlayLib.Entities
         {
             if (suit == Suits.Wild)
             {
-                throw new ArgumentOutOfRangeException("suit", "TokenCard can't be a Wild Card");
+                throw new ArgumentOutOfRangeException("suit", "TopCard can't be a Wild Card");
             }
 
             SuitId = suit;
@@ -31,7 +30,7 @@ namespace CrazyEights.PlayLib.Entities
         {
             if (SuitId == Suits.Wild)
             {
-                throw new InvalidOperationException("TokenCard must updated before a match");
+                throw new InvalidOperationException("TopCard must be updated after construction and before a match");
             }
 
             bool isWild = card.SuitId == Suits.Wild;

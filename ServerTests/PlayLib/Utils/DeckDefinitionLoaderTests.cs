@@ -47,6 +47,18 @@ namespace CrazyEights.Tests.PlayLib.Utils
                 Is.True,
                 "It has loaded correctly the wild card data"
             );
+
+            Assert.That(
+                deckDefinition.SuitsMaxCount,
+                Is.EqualTo(2),
+                "should have correct Suits Max Count"
+            );
+
+            Assert.That(
+                deckDefinition.WildsMaxCount,
+                Is.EqualTo(2),
+                "should have correct Wilds Max Count"
+            );
         }
 
         [Test, Description("Throws when loading invalid Card Data")]

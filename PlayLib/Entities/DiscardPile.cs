@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace CrazyEights.PlayLib.Entities
 {
-    //TODO: Extract TopCard property
     public class DiscardPile
     {
-        public TokenCard TopCard { get; private set; }
         public bool IsEmpty { get { return Cards.Count == 0; } }
         private IList<Card> Cards { get; set; }
 
@@ -17,7 +15,6 @@ namespace CrazyEights.PlayLib.Entities
             {
                 Cards = new List<Card>(totalCards);
                 Cards.Add(firstCard);
-                TopCard = new TokenCard();
             }
             else
             {
@@ -27,17 +24,7 @@ namespace CrazyEights.PlayLib.Entities
 
         public void Add(Card card)
         {
-            if (TopCard.Matches(card))
-            {
-                Cards.Add(card);
-            }
-            else
-            {
-                throw new ArgumentException(
-                    $"Can't add card {card.SuitId} {card.Value} over {TopCard.SuitId} {TopCard.Value} to the discard pile",
-                    "card"
-                );
-            }
+            Cards.Add(card);
         }
 
         public Card[] Clear()
