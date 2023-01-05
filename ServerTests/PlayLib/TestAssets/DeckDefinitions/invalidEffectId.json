@@ -1,7 +1,7 @@
 {
     "suits": [
         {
-            "effectId": -1,
+            "effectId": "invalid",
             "effectArgs": 0,
             "maxBaseCopies": 1,
             "maxExtendedCopies": 2

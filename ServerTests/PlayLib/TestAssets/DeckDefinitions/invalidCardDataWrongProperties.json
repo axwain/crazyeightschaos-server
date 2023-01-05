@@ -1,0 +1,11 @@
+{
+    "suits": [
+        {
+            "effectId": 0,
+            "wrongProperty": 0,
+            "maxBaseCopies": 1,
+            "maxExtendedCopies": 2
+        }
+    ],
+    "wilds": []
+}
