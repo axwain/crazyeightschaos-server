@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+  <Content Include=".\PlayLib\TestAssets\DeckDefinitions\doubleDeck.json">
+      <Link>Assets\DeckDefinitions\doubleDeck.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include=".\PlayLib\TestAssets\DeckDefinitions\invalidCardData.json">
       <Link>Assets\DeckDefinitions\invalidCardData.json</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

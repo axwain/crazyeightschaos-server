@@ -13,16 +13,18 @@ namespace CrazyEights.PlayLib.Entities
         private readonly int PLAYER_LIMIT_EXTENDED_SUITS = 5;
         private readonly int PLAYER_LIMIT_EXTENDED_COPIES = 3;
 
+        private int CurrentCard { get; set; }
         private IDictionary<Suits, IList<Card>> LoadedCards { get; set; }
         private List<Card> Cards { get; set; }
+        private Func<int, int> GetRandomInt { get; set; }
 
-        private int CurrentCard { get; set; }
-
-        public Deck(DeckDefinition definition)
+        public Deck(DeckDefinition definition, Func<int, int> getRandomInt)
         {
             LoadedCards = new Dictionary<Suits, IList<Card>>(TOTAL_SUITS + 1);
             var maxCardCount = definition.WildsMaxCount + definition.SuitsMaxCount * TOTAL_EXTENDED_SUITS;
             Cards = new List<Card>(maxCardCount);
+            GetRandomInt = getRandomInt;
+            CurrentCard = -1;
 
             LoadedCards.Add(Suits.Wild, CreateCardList(definition.Wilds, Suits.Wild));
 
@@ -33,25 +35,20 @@ namespace CrazyEights.PlayLib.Entities
             }
         }
 
-        public void PrepareDeck(int numberOfPlayers)
+        public void Prepare(int numberOfPlayers)
         {
-            Cards.Clear();
-
-            var wilds = LoadedCards[Suits.Wild];
-            foreach (var wild in wilds)
+            if (numberOfPlayers < 2 || numberOfPlayers > 7)
             {
-                var wildCount = ShouldUseBaseCopies(numberOfPlayers) ? wild.MaxBaseCopies : wild.MaxExtendedCopies;
-                for (int i = 0; i < wildCount; i++)
-                {
-                    Cards.Add(wild);
-                }
+                throw new ArgumentOutOfRangeException("numberOfPlayers", "Number of players should be between 2 and 7");
             }
+
+            Cards.Clear();
 
             var startSuit = ShouldUseBaseSuits(numberOfPlayers) ? Suits.Spade : Suits.Star;
 
             for (int i = (int)startSuit; i < TOTAL_SUITS; i++)
             {
-                var suit = (Suits)(i + 1);
+                var suit = (Suits)i;
                 var suitCards = LoadedCards[suit];
                 foreach (var card in suitCards)
                 {
@@ -62,14 +59,23 @@ namespace CrazyEights.PlayLib.Entities
                     }
                 }
             }
+
+            var wilds = LoadedCards[Suits.Wild];
+            foreach (var wild in wilds)
+            {
+                var wildCount = ShouldUseBaseCopies(numberOfPlayers) ? wild.MaxBaseCopies : wild.MaxExtendedCopies;
+                for (int i = 0; i < wildCount; i++)
+                {
+                    Cards.Add(wild);
+                }
+            }
         }
 
         public void Shuffle()
         {
-            var rndNumber = new Random();
             for (int i = 0; i < Cards.Count; i++)
             {
-                var next = rndNumber.Next(Cards.Count);
+                var next = GetRandomInt(Cards.Count);
                 var card = Cards[i];
                 Cards[i] = Cards[next];
                 Cards[next] = card;
@@ -85,7 +91,7 @@ namespace CrazyEights.PlayLib.Entities
             Shuffle();
         }
 
-        public Card DrawCard()
+        public Card Draw()
         {
             if (CurrentCard <= 0)
             {
