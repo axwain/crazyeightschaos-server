@@ -32,7 +32,7 @@ namespace CrazyEights.PlayLib.Entities
             }
             else
             {
-                throw new InvalidOperationException($"Team has already {Size} player ids");
+                throw new InvalidOperationException($"Team of size {Size} is full");
             }
         }
 
