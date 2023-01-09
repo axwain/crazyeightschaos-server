@@ -2,6 +2,7 @@ using CrazyEights.PlayLib.Data;
 using CrazyEights.PlayLib.Entities;
 using CrazyEights.PlayLib.Enums;
 using CrazyEights.PlayLib.Utils;
+using CrazyEights.Tests.TestUtils.RandomIntMock;
 
 namespace CrazyEights.Tests.PlayLib.Entities
 {
@@ -29,25 +30,13 @@ namespace CrazyEights.Tests.PlayLib.Entities
         }
 
         //Interchanges odds with their next previous even
-        private Func<int, int> IntercalateInts
+        private Func<int, int> OddInts
         {
             get
             {
-                Func<Func<int, int>> getInt = () =>
-                {
-                    var counter = 0;
-                    return (int maxCount) =>
-                    {
-                        if (counter >= maxCount)
-                        {
-                            counter = 0;
-                        }
-                        var next = (++counter % 2) - 1 + counter;
-                        return next == maxCount ? next - 1 : next;
-                    };
-                };
+                var mockedRandom = new RandomOddNumbersMock();
 
-                return getInt();
+                return mockedRandom.Next;
             }
         }
 
@@ -55,20 +44,9 @@ namespace CrazyEights.Tests.PlayLib.Entities
         {
             get
             {
-                Func<Func<int, int>> getInt = () =>
-                {
-                    var counter = 0;
-                    return (int maxCount) =>
-                    {
-                        if (counter >= maxCount)
-                        {
-                            counter = 0;
-                        }
-                        return counter++;
-                    };
-                };
+                var mockedRandom = new RandomCounterNumberMock();
 
-                return getInt();
+                return mockedRandom.Next;
             }
         }
 
@@ -197,7 +175,7 @@ namespace CrazyEights.Tests.PlayLib.Entities
         [Test, Description("Initializes Deck for two players and draws from it using provided getRandomInt")]
         public void Deck_Shuffle_WithProvidedGetRandomInt()
         {
-            var deck = new Deck(ValidDeck, IntercalateInts);
+            var deck = new Deck(ValidDeck, OddInts);
             deck.Prepare(2);
             deck.Shuffle();
 
