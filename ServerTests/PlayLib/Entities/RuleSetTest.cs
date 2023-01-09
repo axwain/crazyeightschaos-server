@@ -19,7 +19,7 @@ namespace CrazyEights.Tests.PlayLib.Entities
                 ruleSet[RuleIds.WildDrawOverSuitDraw],
                 Is.False,
                 "should start with WildDrawOverSuitDraw false");
-            Assert.That(ruleSet[RuleIds.WildFinish], Is.True, "should start with WildFinish false");
+            Assert.That(ruleSet[RuleIds.WildFinish], Is.True, "should start with WildFinish true");
         }
 
         [TestCase(RuleIds.WildFinish, false, true)]

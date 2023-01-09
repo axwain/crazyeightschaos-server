@@ -35,23 +35,6 @@ namespace CrazyEights.Tests.PlayLib.Entities
                     $"should have {sampleCard.SuitId} {sampleCard.Value} with id {i}"
                 );
             }
-
-            for (var i = 0; i < totalCards; i++)
-            {
-                Assert.That(
-                    hand.RemoveCard(i),
-                    Is.True,
-                    $"should remove {sampleCard.SuitId} {sampleCard.Value} with id {i}"
-                );
-
-                Assert.That(
-                    () => hand.PeekCard(i),
-                    Throws.TypeOf<KeyNotFoundException>(),
-                    $"should not throw trying to get id {i}"
-                );
-            }
-
-            Assert.That(hand.Size, Is.EqualTo(0), $"should have {totalCards} cards");
         }
 
         [Test, Description("Remove cards from the Hand with unique ids")]
@@ -66,6 +49,23 @@ namespace CrazyEights.Tests.PlayLib.Entities
             }
 
             Assert.That(hand.Size, Is.EqualTo(totalCards), $"should have {totalCards} cards");
+
+            for (var i = 0; i < totalCards; i++)
+            {
+                Assert.That(
+                    hand.RemoveCard(i),
+                    Is.True,
+                    $"should remove {sampleCard.SuitId} {sampleCard.Value} with id {i}"
+                );
+
+                Assert.That(
+                    () => hand.PeekCard(i),
+                    Throws.TypeOf<KeyNotFoundException>(),
+                    $"should throw trying to get id {i}"
+                );
+            }
+
+            Assert.That(hand.Size, Is.EqualTo(0), $"should have {totalCards} cards");
         }
 
         [Test, Description("Can't add cards to the Hand with duplicate ids")]
@@ -78,10 +78,10 @@ namespace CrazyEights.Tests.PlayLib.Entities
             hand.AddCard(id, sampleCard);
             Assert.That(hand.Size, Is.EqualTo(1), "should have one card");
             Assert.That(
-                    hand.PeekCard(id),
-                    Is.EqualTo(sampleCard),
-                    $"should have {sampleCard.SuitId} {sampleCard.Value} with id {id}"
-                );
+                hand.PeekCard(id),
+                Is.EqualTo(sampleCard),
+                $"should have {sampleCard.SuitId} {sampleCard.Value} with id {id}"
+            );
 
             Assert.That(
                 hand.AddCard(id, duplicateCard),
@@ -89,11 +89,13 @@ namespace CrazyEights.Tests.PlayLib.Entities
                 $"should have not added a card with a duplicated id {id}"
             );
             Assert.That(hand.Size, Is.EqualTo(1), "should still have one card");
+
+            var peekedCard = hand.PeekCard(id);
             Assert.That(
-                    hand.PeekCard(id),
-                    Is.EqualTo(sampleCard),
-                    $"should have not changed card id {id} from {sampleCard.SuitId} {sampleCard.Value}"
-                );
+                peekedCard,
+                Is.EqualTo(sampleCard),
+                $"should have {peekedCard.SuitId} {peekedCard.Value} as {sampleCard.SuitId} {sampleCard.Value}"
+            );
         }
 
         [Test, Description("Hand doesn't change after trying to remove a card with an invalid id")]
@@ -105,10 +107,10 @@ namespace CrazyEights.Tests.PlayLib.Entities
             hand.AddCard(id, sampleCard);
             Assert.That(hand.Size, Is.EqualTo(1), "should have one card");
             Assert.That(
-                    hand.PeekCard(id),
-                    Is.EqualTo(sampleCard),
-                    $"should have {sampleCard.SuitId} {sampleCard.Value} with id {id}"
-                );
+                hand.PeekCard(id),
+                Is.EqualTo(sampleCard),
+                $"should have {sampleCard.SuitId} {sampleCard.Value} with id {id}"
+            );
 
             Assert.That(
                 hand.RemoveCard(0),
@@ -116,11 +118,13 @@ namespace CrazyEights.Tests.PlayLib.Entities
                 $"should have not removed card with a invalid id {0}"
             );
             Assert.That(hand.Size, Is.EqualTo(1), "should still have one card");
+
+            var peekedCard = hand.PeekCard(id);
             Assert.That(
-                    hand.PeekCard(id),
-                    Is.EqualTo(sampleCard),
-                    $"should have not changed card id {id} from {sampleCard.SuitId} {sampleCard.Value}"
-                );
+                peekedCard,
+                Is.EqualTo(sampleCard),
+                $"should have {peekedCard.SuitId} {peekedCard.Value} as {sampleCard.SuitId} {sampleCard.Value}"
+            );
         }
     }
 }
