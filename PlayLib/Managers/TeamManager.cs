@@ -25,7 +25,7 @@ namespace CrazyEights.PlayLib.Managers
 
         public TeamManager(int teamSize, IList<int> playerIds, Func<int, int> getRandomInt)
         {
-            if (teamSize < MIN_TEAM_SIZE && teamSize > MAX_TEAM_SIZE)
+            if (teamSize < MIN_TEAM_SIZE || teamSize > MAX_TEAM_SIZE)
             {
                 throw new ArgumentOutOfRangeException(
                     "teamSize",
@@ -33,25 +33,28 @@ namespace CrazyEights.PlayLib.Managers
                 );
             }
 
+            // ceiling integer division: http://www.cs.nott.ac.uk/~psarb2/G51MPC/slides/NumberLogic.pdf
+            var totalTeams = (playerIds.Count + teamSize - 1) / teamSize;
+            if (totalTeams <= 1)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "totalTeams",
+                    $"team count {totalTeams} shouldn't be less than 2"
+                );
+            }
+
             TeamSize = teamSize;
             Teams = new List<Team>(MAX_TEAMS);
 
-            // ceiling integer division: http://www.cs.nott.ac.uk/~psarb2/G51MPC/slides/NumberLogic.pdf
-            var totalTeams = (playerIds.Count + teamSize - 1) / teamSize;
             var shuffledPlayerIds = Shuffle(playerIds, getRandomInt);
 
             AssignTeams(shuffledPlayerIds, totalTeams);
         }
 
-        public void RemovePlayer(int teamId, int playerId)
-        {
-            Teams[teamId].RemovePlayer(playerId);
-        }
-
         public void AddPlayer(int playerId)
         {
             if ((TeamSize == 1 && PlayerCount >= 7) ||
-                (TeamSize > 2 && PlayerCount >= 6))
+                (TeamSize > 1 && PlayerCount >= 6))
             {
                 throw new InvalidOperationException("Teams are full");
             }
@@ -79,6 +82,16 @@ namespace CrazyEights.PlayLib.Managers
             }
         }
 
+        // TODO: Game Manager should end game if only one team remains?
+        public void RemovePlayer(int teamId, int playerId)
+        {
+            Teams[teamId].RemovePlayer(playerId);
+            if (Teams[teamId].PlayerCount == 0)
+            {
+                Teams.RemoveAt(teamId);
+            }
+        }
+
         private IList<int> Shuffle(IList<int> playerIds, Func<int, int> getRandomInt)
         {
             var ids = new List<int>(playerIds);
@@ -103,7 +116,7 @@ namespace CrazyEights.PlayLib.Managers
             var idIndex = 0;
             while (idIndex < playerIds.Count)
             {
-                for (var teamIndex = 0; teamIndex < TeamSize && idIndex < playerIds.Count; teamIndex++, idIndex++)
+                for (var teamIndex = 0; teamIndex < Teams.Count && idIndex < playerIds.Count; teamIndex++, idIndex++)
                 {
                     Teams[teamIndex].AddPlayer(playerIds[idIndex]);
                 }
