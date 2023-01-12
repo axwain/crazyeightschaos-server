@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CrazyEights.PlayLib.Entities
 {
@@ -14,6 +15,11 @@ namespace CrazyEights.PlayLib.Entities
         {
             Size = size;
             Players = new HashSet<int>();
+        }
+
+        public IList<int> GetPlayerIds()
+        {
+            return Players.ToList<int>();
         }
 
         public bool HasPlayer(int id)
