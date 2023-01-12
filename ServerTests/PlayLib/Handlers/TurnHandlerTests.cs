@@ -20,7 +20,7 @@ namespace CrazyEights.Tests.PlayLib.Handlers
         {
             var turnHandler = new TurnHandler(PlayerIdsMock, RandomIntMock);
             turnHandler.ComputeNextTurn();
-            Assert.That(turnHandler.NextId, Is.EqualTo(444), "should have fourth player as the next one");
+            Assert.That(turnHandler.NextId, Is.EqualTo(444), "should have the fourth player as the next one");
         }
 
         [Test, Description("TurnHandler gives the correct next turn after looping around players")]
@@ -31,7 +31,7 @@ namespace CrazyEights.Tests.PlayLib.Handlers
             {
                 turnHandler.ComputeNextTurn();
             }
-            Assert.That(turnHandler.NextId, Is.EqualTo(111), "should have first player as the next one");
+            Assert.That(turnHandler.NextId, Is.EqualTo(111), "should have the first player as the next one");
         }
 
         [Test, Description("TurnHandler reverses turn order")]
@@ -40,7 +40,7 @@ namespace CrazyEights.Tests.PlayLib.Handlers
             var turnHandler = new TurnHandler(PlayerIdsMock, RandomIntMock);
             turnHandler.ReverseOrder();
             turnHandler.ComputeNextTurn();
-            Assert.That(turnHandler.NextId, Is.EqualTo(222), "should have second player as the next one");
+            Assert.That(turnHandler.NextId, Is.EqualTo(222), "should have the second player as the next one");
         }
 
         [Test, Description("TurnHandler gives the correct next turn after looping around players in reverse order")]
@@ -52,7 +52,7 @@ namespace CrazyEights.Tests.PlayLib.Handlers
             {
                 turnHandler.ComputeNextTurn();
             }
-            Assert.That(turnHandler.NextId, Is.EqualTo(555), "should have first player as the next one");
+            Assert.That(turnHandler.NextId, Is.EqualTo(555), "should have the fifth player as the next one");
         }
 
         [TestCase(1, 555)]
@@ -92,7 +92,7 @@ namespace CrazyEights.Tests.PlayLib.Handlers
             Assert.That(
                 turnHandler.NextId,
                 Is.EqualTo(expectedId),
-                $"should have skipped {totalSkips} turn(s) to playerId {expectedId}"
+                $"should have skipped {totalSkips} turn(s) to playerId {expectedId} in reverse order"
             );
         }
     }
