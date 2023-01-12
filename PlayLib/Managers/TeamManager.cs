@@ -19,6 +19,18 @@ namespace CrazyEights.PlayLib.Managers
             get => Teams.Aggregate(0, (total, next) => total + next.PlayerCount);
         }
 
+        public IList<int> Players
+        {
+            get => Teams.Aggregate(
+                new List<int>(7),
+                (playerIds, next) =>
+                {
+                    playerIds.AddRange(next.GetPlayerIds());
+                    return playerIds;
+                }
+            );
+        }
+
         public int TeamCount { get => Teams.Count; }
 
         private IList<Team> Teams { get; set; }
