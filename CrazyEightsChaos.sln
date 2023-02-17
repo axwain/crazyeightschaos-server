@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTests", "ServerTests\ServerTests.csproj", "{12C7F047-F3DB-4982-BC2D-707617DA6FD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayLib", "PlayLib\PlayLib.csproj", "{CFC28DA4-96A5-4F1F-974A-18ACC33C09B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetLib", "NetLib\NetLib.csproj", "{A3E4140E-9B74-4C56-9071-8F49730F445A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{12C7F047-F3DB-4982-BC2D-707617DA6FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12C7F047-F3DB-4982-BC2D-707617DA6FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12C7F047-F3DB-4982-BC2D-707617DA6FD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC28DA4-96A5-4F1F-974A-18ACC33C09B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC28DA4-96A5-4F1F-974A-18ACC33C09B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC28DA4-96A5-4F1F-974A-18ACC33C09B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC28DA4-96A5-4F1F-974A-18ACC33C09B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E4140E-9B74-4C56-9071-8F49730F445A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E4140E-9B74-4C56-9071-8F49730F445A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E4140E-9B74-4C56-9071-8F49730F445A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E4140E-9B74-4C56-9071-8F49730F445A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

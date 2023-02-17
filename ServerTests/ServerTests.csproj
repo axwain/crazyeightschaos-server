@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Server\Server.csproj" />
     <ProjectReference Include="..\PlayLib\PlayLib.csproj" />
+    <ProjectReference Include="..\NetLib\NetLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
